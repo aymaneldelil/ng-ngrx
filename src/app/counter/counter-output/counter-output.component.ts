@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store'
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { getCounter } from '../state/counter.selector';
 //---------------------------------------------------------------------------------------------------------------------------------------------
 @Component({
   selector: 'app-counter-output',
@@ -10,18 +12,15 @@ import { Store } from '@ngrx/store'
 
 export class CounterOutputComponent implements OnInit {
 
-  public counter: number = 0;
+  public counter$ = new Observable<number>;
   constructor(
     private _store: Store<{ counter: { counter: number } }>
 
   ) { }
 
   ngOnInit(): void {
-    this._store.select('counter').subscribe(
-      {
-        next: (n => this.counter = n.counter)
-      }
-    )
+
+    this.counter$ = this._store.select(getCounter)
   }
 
 }
